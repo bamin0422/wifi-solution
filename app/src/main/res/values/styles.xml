@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.AppCompat.NoActionBar">
+    <style name="myStyle" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,6 +10,11 @@
         <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
         <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+        <item name="bottomNavigationStyle">@style/bottomNavigationView</item>
+    </style>
+
+    <style name="bottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
