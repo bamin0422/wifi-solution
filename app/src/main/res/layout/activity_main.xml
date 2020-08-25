@@ -13,7 +13,7 @@
         android:id="@+id/withfi_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"></androidx.viewpager.widget.ViewPager>
+        app:layout_constraintBottom_toBottomOf="parent"></androidx.viewpager.widget.ViewPager>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
 

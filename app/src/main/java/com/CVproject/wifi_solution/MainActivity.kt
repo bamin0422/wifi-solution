@@ -3,6 +3,7 @@ package com.CVproject.wifi_solution
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
+import kotlinx.android.synthetic.main.activity_fragment__q_r.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         withfi_view_pager.adapter = MainPagerAdapter(supportFragmentManager) // adapter를 사용해 Viewpager와 fragment연결
         withfi_view_pager.offscreenPageLimit = 2 // 뷰 계층 구조의 보관된 페이지, View/Fragment 수를 제어할 수 있다.
 
+        // viewPager 설정
         withfi_view_pager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {}
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        // bottomNavigationView 설정
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.btn_wifiList -> withfi_view_pager.currentItem = 0
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
     }
 
 }
