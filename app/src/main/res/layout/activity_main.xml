@@ -22,14 +22,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Scan"/>
+            android:background="#62B9FF"
+            android:text="스캔" />
 
         <Button
             android:id="@+id/btn_QR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="QR Code"/>
+            android:background="#62B9FF"
+            android:text="QR 코드생성" />
 
 
         <Button
@@ -37,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Wifi List"/>
+            android:background="#62B9FF"
+            android:text="Wifi 목록" />
 
 
 
@@ -47,6 +50,6 @@
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp" />
 
 </LinearLayout>
