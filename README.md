@@ -1,4 +1,5 @@
 # wifi-solution
+
 ![](img/withfi_main.png)
 
 평소에 wifi 접속을 할 때, 일일이 텍스트로 비밀번호를 입력해야하는 불편한 점과 친구들과 wifi를 보다 쉽게 사용하고 공유하는 목적으로 **With fi**라는 앱을 기획하게 되었습니다.
