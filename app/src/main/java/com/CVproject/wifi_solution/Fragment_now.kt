@@ -7,11 +7,15 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,6 +29,7 @@ class Fragment_now : Fragment(){
 
     lateinit var wifiManager: WifiManager
     lateinit var mAdapter: RecyclerAdapter
+    lateinit var rotateAnimation: Animation
 
     private lateinit var recyclerView: RecyclerView
     private val wifiScanReceiver = object: BroadcastReceiver(){
@@ -33,23 +38,20 @@ class Fragment_now : Fragment(){
             var suc = intent?.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
 
             if(suc == true){
-                Toast.makeText(context, "성공!!", Toast.LENGTH_SHORT).show()
                 scanSuccess()
             }else{
-                Toast.makeText(context, "실패!!", Toast.LENGTH_SHORT).show()
                 scanFailure()
             }
+
         }
     }
 
     // Wifi검색 성공
     private fun scanSuccess() {
-        Log.d(TAG, "ScanSuccess 첫번째")
         var results: List<ScanResult> = wifiManager.scanResults
-        Log.d(TAG, "ScanSuccess 두번째")
         mAdapter = RecyclerAdapter(results)
-        Log.d(TAG, "ScanSuccess 세번째")
         view?.wifi_list?.adapter = mAdapter
+        view?.TV_wifiCounter?.setText("총 ${mAdapter.itemCount}개의 wifi가 있습니다.")
 
     }
 
@@ -61,9 +63,9 @@ class Fragment_now : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.activity_fragment_now, container, false)
+
+
         recyclerView = view.findViewById(R.id.wifi_list)
-
-
 
         // wifi scan 관련
         wifiManager = view.context.getSystemService(Context.WIFI_SERVICE) as WifiManager
