@@ -71,7 +71,13 @@ class MainActivity : AppCompatActivity() {
             .setDeniedMessage("권한을 거부하셨습니다. [앱 설정] -> [권한] 항목에서 허용해주세요.")
             .setPermissions(
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.CHANGE_WIFI_MULTICAST_STATE,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.CHANGE_WIFI_STATE,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_WIFI_STATE
             )
             .check()
     }
