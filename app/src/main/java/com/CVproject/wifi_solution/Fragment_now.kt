@@ -1,19 +1,23 @@
 package com.CVproject.wifi_solution
 
 import android.content.BroadcastReceiver
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import kotlinx.android.synthetic.main.activity_fragment_now.view.*
 
 class Fragment_now : Fragment(){
@@ -25,12 +29,14 @@ class Fragment_now : Fragment(){
     private lateinit var recyclerView: RecyclerView
     private val wifiScanReceiver = object: BroadcastReceiver(){
         override fun onReceive(c: Context?, intent: Intent?) { // wifiManager.startscan() 시 발동
-            Toast.makeText(context, "제발!!", Toast.LENGTH_SHORT).show()
+
             var suc = intent?.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
 
             if(suc == true){
+                Toast.makeText(context, "성공!!", Toast.LENGTH_SHORT).show()
                 scanSuccess()
             }else{
+                Toast.makeText(context, "실패!!", Toast.LENGTH_SHORT).show()
                 scanFailure()
             }
         }
@@ -38,9 +44,13 @@ class Fragment_now : Fragment(){
 
     // Wifi검색 성공
     private fun scanSuccess() {
+        Log.d(TAG, "ScanSuccess 첫번째")
         var results: List<ScanResult> = wifiManager.scanResults
+        Log.d(TAG, "ScanSuccess 두번째")
         mAdapter = RecyclerAdapter(results)
-        recyclerView.adapter = mAdapter
+        Log.d(TAG, "ScanSuccess 세번째")
+        view?.wifi_list?.adapter = mAdapter
+
     }
 
     // Wifi검색 실패
@@ -68,6 +78,10 @@ class Fragment_now : Fragment(){
             success = wifiManager.startScan()
             if(!success) Toast.makeText(view.context.applicationContext, "wifi 스캔에 실패하였습니다.", Toast.LENGTH_SHORT).show()
         }
+
+        // divider 추가
+        val decoration =DividerItemDecoration(view.context?.applicationContext, VERTICAL)
+        view.wifi_list.addItemDecoration(decoration)
 
         return view
     }
