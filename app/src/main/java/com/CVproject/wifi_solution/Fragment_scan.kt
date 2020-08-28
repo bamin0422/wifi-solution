@@ -1,10 +1,12 @@
 package com.CVproject.wifi_solution
 
+import android.content.Context
+import android.graphics.Camera
+import android.hardware.SensorManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.activity_fragment_scan.*
 
 class Fragment_scan : Fragment(){
 
@@ -13,4 +15,7 @@ class Fragment_scan : Fragment(){
         val view = inflater.inflate(R.layout.activity_fragment_scan, container, false)
         return view
     }
+
+
+
 }
