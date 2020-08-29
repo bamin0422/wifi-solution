@@ -13,9 +13,13 @@ class RecyclerAdapter(var items: List<ScanResult>) :
     // ViewHolder 단위 객체로 View의 데이터를 설정
     class ViewHolder (v: View): RecyclerView.ViewHolder(v){
         var tvWifiName: TextView = v.findViewById(R.id.wifi_name)
+        var view = v
 
         public fun setItem(item: ScanResult){
             tvWifiName.setText(item.SSID)
+            view.setOnClickListener{
+
+            }
         }
     }
 
