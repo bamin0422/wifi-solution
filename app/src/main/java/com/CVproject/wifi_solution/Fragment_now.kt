@@ -92,7 +92,7 @@ class Fragment_now : Fragment(){
         // wifi scan 시작
         var success = wifiManager.startScan()
 
-        // refresh 버튼 클릭 시
+        // refresh 버튼 클릭 시 작동
         view.reScanWifi.setOnClickListener {
             success = wifiManager.startScan()
             if(!success) Toast.makeText(view.context.applicationContext, "wifi 스캔에 실패하였습니다.", Toast.LENGTH_SHORT).show()
