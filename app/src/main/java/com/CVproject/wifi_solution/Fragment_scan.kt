@@ -2,7 +2,10 @@ package com.CVproject.wifi_solution
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -12,6 +15,9 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -20,17 +26,21 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.view.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.view.viewFinder
+import kotlinx.android.synthetic.main.password_popup.*
 import java.nio.ByteBuffer
 
 class Fragment_scan : Fragment(){
 
     var imageCapture : ImageCapture? = null
+    var lineText: String? = null
 
 
 
@@ -59,11 +69,62 @@ class Fragment_scan : Fragment(){
             .addOnSuccessListener {firebaseVisionText ->
                 for(block in firebaseVisionText.textBlocks){
                     for(line in block.lines){
-                        var lineText = line.text
+                        lineText = line.text
                         view!!.textView.setText(lineText)
+                        if(lineText != null){
+                            showPasswordPopup()
+                        }
                     }
                 }
             }
+    }
+
+    var listener = object : DialogInterface.OnClickListener{
+        override fun onClick(p0: DialogInterface?, p1: Int) {
+            when(p1){
+                DialogInterface.BUTTON_NEGATIVE ->
+                    textView.text = "다시 인식해주세요."
+                DialogInterface.BUTTON_NEUTRAL ->
+                    rewrite()
+
+            }
+        }
+
+    }
+
+    private fun rewrite(){
+        var builder = AlertDialog.Builder(view?.context)
+        builder.setTitle("비밀번호 수정")
+
+        var v1 = layoutInflater.inflate(R.layout.password_popup, null)
+        builder.setView(v1)
+
+        var listener = object : DialogInterface.OnClickListener{
+            override fun onClick(p0: DialogInterface?, p1: Int) {
+                var alert = p0 as AlertDialog
+                var edit1 = alert.findViewById<EditText>(R.id.editText)
+                // edit1.text = lineText 이게 에러 발생
+                textView.text = "${edit1?.text}"
+            }
+
+        }
+
+
+        builder.setPositiveButton("확인", listener)
+        builder.setNegativeButton("취소", null)
+
+        builder.show()
+    }
+
+    private fun showPasswordPopup() {
+        var builder = AlertDialog.Builder(view?.context)
+        builder.setTitle("비밀번호 확인")
+        builder.setMessage("인식된 글자가 비밀번호가 맞습니까?")
+        builder.setPositiveButton("맞습니다.", null)
+        builder.setNegativeButton("아닙니다.", listener)
+        builder.setNeutralButton("수정", listener)
+        builder.show()
+
     }
 
     fun imageProxyToBitmap(imageProxy: ImageProxy) : Bitmap{
