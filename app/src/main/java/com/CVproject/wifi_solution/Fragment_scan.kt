@@ -2,23 +2,16 @@ package com.CVproject.wifi_solution
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.hardware.Camera
-import android.net.wifi.WifiConfiguration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -27,22 +20,18 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.view.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.view.viewFinder
-import kotlinx.android.synthetic.main.password_popup.*
-import kotlinx.android.synthetic.main.password_popup.view.*
 import java.nio.ByteBuffer
 
 class Fragment_scan : Fragment(){
 
     var imageCapture : ImageCapture? = null
-    var lineText: String? = null
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,33 +59,12 @@ class Fragment_scan : Fragment(){
             .addOnSuccessListener {firebaseVisionText ->
                 for(block in firebaseVisionText.textBlocks){
                     for(line in block.lines){
-                        lineText = line.text
+                        var lineText = line.text
                         view!!.textView.setText(lineText)
-                        showPasswordPopup()
                     }
                 }
             }
     }
-
-
-    private fun showPasswordPopup() {
-     val inflater = view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.password_popup, null)
-        var password: TextView = view.findViewById(R.id.editText)
-        password.text = lineText
-
-        val alertDialog = AlertDialog.Builder(view.context)
-            .setTitle("비밀번호 확인")
-            .setPositiveButton("확인"){ dialog, which ->
-                textView.text = "${password.text}"
-            }
-            .setNeutralButton("취소",null)
-            .create()
-
-        alertDialog.setView(view)
-        alertDialog.show()
-    }
-
 
     fun imageProxyToBitmap(imageProxy: ImageProxy) : Bitmap{
         val buffer = imageProxy.planes[0].buffer

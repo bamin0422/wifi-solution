@@ -7,20 +7,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -> Unit) :
+class RecyclerAdapter(var items: List<ScanResult>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     // ViewHolder 단위 객체로 View의 데이터를 설정
-    class ViewHolder (v: View, itemClick: (ScanResult) -> Unit): RecyclerView.ViewHolder(v){
+    class ViewHolder (v: View): RecyclerView.ViewHolder(v){
         var tvWifiName: TextView = v.findViewById(R.id.wifi_name)
         var view = v
-        var itemclick = itemClick
 
-        fun setItem(item: ScanResult){
+        public fun setItem(item: ScanResult){
             tvWifiName.setText(item.SSID)
+            view.setOnClickListener{
 
-            view.setOnClickListener {
-                itemclick(item)
             }
         }
     }
@@ -28,7 +26,7 @@ class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -
     // 보여줄 아이템 개수만큼 View를 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         var itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.wifi_list_item, parent, false)
-        return ViewHolder(itemView, itemClick)
+        return ViewHolder(itemView)
     }
 
     override fun getItemCount(): Int = items.size // items의 크기를 구하는 역할
