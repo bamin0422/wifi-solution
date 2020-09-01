@@ -26,7 +26,9 @@ class Fragment_now : Fragment(){
     lateinit var wifiManager: WifiManager
     lateinit var mAdapter: RecyclerAdapter
     lateinit var rotateAnimation: Animation
-    lateinit var wifiPW: String
+    public var wifiPW = "TESTID"
+    public var wifiID = "TESTPW"
+    public var wifiSecurityType = ""
 
     private lateinit var recyclerView: RecyclerView
     private val wifiScanReceiver = object: BroadcastReceiver(){
@@ -48,30 +50,51 @@ class Fragment_now : Fragment(){
         var results: List<ScanResult> = wifiManager.scanResults
         mAdapter = RecyclerAdapter(results){scanResult ->
             makeDialog(view, scanResult.SSID)
+            scanResult.capabilities
         }
         view?.wifi_list?.adapter = mAdapter
         view?.TV_wifiCounter?.setText("총 ${mAdapter.itemCount}개의 wifi가 있습니다.")
 
     }
 
-    private fun makeDialog(view: View?, wifiID: String) {
+    private fun makeDialog(view: View?, wifiSSID: String) {
         val dlg = WifiDialog(view?.context)
         dlg.setOnOKClickedListener { content ->
             Toast.makeText(context, "PW : ${content}", Toast.LENGTH_SHORT).show()
             wifiPW = content
+            wifiID = wifiSSID
             var wificonfig = WifiConfiguration()
             wificonfig.SSID = String.format("\""+wifiID+"\"")
             wificonfig.preSharedKey = String.format("\""+wifiPW+"\"")
 
             wifiManager.addNetwork(wificonfig)
+
+            wifiSecurityType = getSecurityType(wificonfig).toString()
         }
         dlg.start(wifiID+"에 연결하시겠습니까?")
 
     }
 
+    // wifi의 securityType 구하는 함수들
+    private fun getSecurity(wificonfig: WifiConfiguration): Int {
+        if(wificonfig.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK))return 2 // SECURITY_PSK
+        if(wificonfig.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_EAP) || wificonfig.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.IEEE8021X))return 3 // SECURITY_EAP
+        if(wificonfig.wepKeys.first() != null)return 1 // SECURITY_WEP
+        else return 0 // SECURITY_NONE
+    }
+
+    private fun getSecurityType(wificonfig: WifiConfiguration): SecurityType {
+        var securityType = getSecurity(wificonfig)
+        if(securityType == 1)return "WEP".toSecurityType()
+        else if(securityType == 2){
+            if(wificonfig.allowedProtocols.get(WifiConfiguration.Protocol.RSN))return "WPA2".toSecurityType()
+            else return "WPA".toSecurityType()
+        }else return "NONE".toSecurityType()
+    }
+
     // Wifi검색 실패
     private fun scanFailure() {
-        view?.TV_wifiCounter?.setText("발견된 wifi가 없습니다.")
+        view?.TV_wifiCounter?.setText("wifi 탐색에 실패하였습니다.")
     }
 
 
