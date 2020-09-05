@@ -77,7 +77,8 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.CHANGE_WIFI_STATE,
                 android.Manifest.permission.INTERNET,
-                android.Manifest.permission.ACCESS_WIFI_STATE
+                android.Manifest.permission.ACCESS_WIFI_STATE,
+                android.Manifest.permission.ACCESS_NETWORK_STATE
             )
             .check()
     }

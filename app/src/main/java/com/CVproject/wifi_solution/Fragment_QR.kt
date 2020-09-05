@@ -18,15 +18,13 @@ class Fragment_QR : Fragment(){
         val view = inflater.inflate(R.layout.activity_fragment__q_r, container, false)
 
         var fragmentNow = Fragment_now()
-        val json = WithFi(fragmentNow.wifiID, fragmentNow.wifiPW, fragmentNow.wifiSecurityType.toSecurityType()).TJ()
-
 
         // QR 코드 생성
-        var currentWifi = fragmentNow.wifiID
+        var currentWifi = CurWifi("TP-LINK_FC98", "37319809", "WPA")
 
         view.btn_qrmaker.setOnClickListener {
-                view -> QR_image.setImageBitmap(QRmaker(json).makeQRBitmap())
-                wifi_name_QR.setText(currentWifi)
+                view -> QR_image.setImageBitmap(QRmaker(currentWifi.toString()).makeQRBitmap())
+                wifi_name_QR.setText(currentWifi.ssid)
         }
 
         return view

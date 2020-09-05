@@ -1,51 +1,50 @@
 package com.CVproject.wifi_solution
 
-import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.DialogInterface
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.hardware.Camera
-import android.net.wifi.WifiConfiguration
-import android.os.Build
+import android.net.wifi.ScanResult
+import android.net.wifi.WifiManager
+import android.net.wifi.WifiNetworkSuggestion
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.view.*
-import kotlinx.android.synthetic.main.activity_fragment_scan.view.viewFinder
-import kotlinx.android.synthetic.main.password_popup.*
-import kotlinx.android.synthetic.main.password_popup.view.*
-import java.nio.ByteBuffer
 
-class Fragment_scan : Fragment(){
+class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
 
     var imageCapture : ImageCapture? = null
     var lineText: String? = null
 
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // View가 Recreate 시 처리
+        val restoreValue = arguments?.getString(keyRestore)
+        if(restoreValue != null){
+            // action to do something
+        }
+
         val view = inflater.inflate(R.layout.activity_fragment_scan, container, false)
 
         bindCameraUseCase(view)
@@ -53,7 +52,37 @@ class Fragment_scan : Fragment(){
             takePhoto(view)
         }
 
+
         return view
+    }
+
+    private fun showFragment_now(){
+        parentFragmentManager.commit {
+            replace(R.id.scan_layout,Fragment_now().apply {
+                // FragmentB 표시할 때 Listener을 전달
+                setListener(this@Fragment_scan)
+            })
+            addToBackStack(null)
+        }
+    }
+
+    // Fragment_now.onResultListener을 실행
+    override fun onResult(value: List<ScanResult>) {
+        // Fragment가 Visible중일 때 처리
+        if(isVisible){
+            Toast.makeText(context,"Visible 중...", Toast.LENGTH_SHORT).show()
+        }
+        // Visible이 아닌 경우, Fragment#Argument에 데이터 저장
+        else{
+            arguments = (arguments?:Bundle()).also {
+                it.putString(keyRestore, value.toString())
+            }
+
+        }
+    }
+
+    companion object{
+        private const val keyRestore = "resultRestore"
     }
 
     fun takePhoto(view: View){
@@ -69,11 +98,12 @@ class Fragment_scan : Fragment(){
         FirebaseVision.getInstance().onDeviceTextRecognizer.processImage(FirebaseVisionImage.fromBitmap(bitmap))
             .addOnSuccessListener {firebaseVisionText ->
                 for(block in firebaseVisionText.textBlocks){
-                    for(line in block.lines){
-                        lineText = line.text
-                        view!!.textView.setText(lineText)
-                        showPasswordPopup()
-                    }
+
+                    lineText = block.text
+                    view?.textView?.setText(lineText)
+                    showPasswordPopup()
+                    break
+
                 }
             }
     }
@@ -89,12 +119,18 @@ class Fragment_scan : Fragment(){
             .setTitle("비밀번호 확인")
             .setPositiveButton("확인"){ dialog, which ->
                 textView.text = "${password.text}"
+                startScan(textView.text.toString())
             }
             .setNeutralButton("취소",null)
             .create()
 
         alertDialog.setView(view)
         alertDialog.show()
+    }
+
+
+
+    private fun startScan(password: String) {
     }
 
 
@@ -138,4 +174,6 @@ class Fragment_scan : Fragment(){
 
         },ContextCompat.getMainExecutor(view.context))
     }
+
+
 }
