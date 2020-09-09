@@ -4,9 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.net.wifi.*
+import android.net.wifi.ScanResult
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,32 +13,15 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_fragment_now.view.*
 
+
 class Fragment_now : Fragment() {
 
-    // fragment 간의 통신용 Listener 정의
-    interface OnResultListener{
-        fun onResult(value: List<ScanResult>)
-    }
-
-    private var listener: OnResultListener? = null
-
-    // 외부에서 전달할 Setter Listener
-    fun setListener(listener: OnResultListener){
-        this.listener = listener
-
-    }
-
-    private fun clickDone(){
-        listener?.onResult(results)
-        parentFragmentManager.popBackStack()
-    }
 
     // 전역변수로 바꿈
     lateinit var results: MutableList<ScanResult>
@@ -75,7 +57,6 @@ class Fragment_now : Fragment() {
         view?.wifi_list?.adapter = mAdapter
         view?.TV_wifiCounter?.setText("총 ${mAdapter.itemCount}개의 wifi가 있습니다.")
 
-        clickDone()
     }
 
     private fun makeDialog(view: View?, wifiSelected: ScanResult) {
@@ -84,29 +65,12 @@ class Fragment_now : Fragment() {
         dlg.setOnOKClickedListener { content ->
             wifiPW = content
             wifiManager = view?.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            var curwifi = CurWifi(wifiID, wifiPW, "WPA")
 
-            var suggestionList = suggestion(wifiID, wifiPW)
-
-            val status = wifiManager.addNetworkSuggestions(suggestionList)
-
-
-            val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-            val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-            if(isConnected){
-                myRef.child("curWifi").setValue(curwifi)
-            }
+            // wifi 연결
+            NetworkConnector(wifiManager, context).connectWifi(wifiID, wifiPW)
         }
         dlg.start(wifiID+"에 연결하시겠습니까?")
 
-    }
-
-    private fun suggestion(wifiID: String, wifiPW: String): List<WifiNetworkSuggestion> {
-        val suggestion1 = WifiNetworkSuggestion.Builder().setSsid(wifiID).setWpa2Passphrase(wifiPW).build()
-        val suggestion2 = WifiNetworkSuggestion.Builder().setSsid(wifiID).setWpa3Passphrase(wifiPW).build()
-
-        return listOf(suggestion1, suggestion2)
     }
 
     // Wifi검색 실패
@@ -130,7 +94,6 @@ class Fragment_now : Fragment() {
         wifiManager.setWifiEnabled(true)
         var intentFilter= IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         view.context.registerReceiver(wifiScanReceiver, intentFilter)
-
 
         // wifi scan 시작
         var success = wifiManager.startScan()
