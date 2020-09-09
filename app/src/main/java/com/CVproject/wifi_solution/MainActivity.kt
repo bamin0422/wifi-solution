@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.firebase.database.FirebaseDatabase
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_fragment__q_r.*
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        var myRef = FirebaseDatabase.getInstance().reference
+        myRef.child("wifiList").setValue(null)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

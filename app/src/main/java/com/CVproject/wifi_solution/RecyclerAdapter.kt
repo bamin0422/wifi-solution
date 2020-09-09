@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
+
 
 class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -> Unit) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
@@ -13,17 +17,19 @@ class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -
     // ViewHolder 단위 객체로 View의 데이터를 설정
     class ViewHolder (v: View, itemClick: (ScanResult) -> Unit): RecyclerView.ViewHolder(v){
         var tvWifiName: TextView = v.findViewById(R.id.wifi_name)
+        var myRef:DatabaseReference = FirebaseDatabase.getInstance().reference
         var view = v
         var itemclick = itemClick
 
         fun setItem(item: ScanResult){
             tvWifiName.setText(item.SSID)
-
+            myRef.child("wifiList").push().setValue(item.SSID)
             view.setOnClickListener {
                 itemclick(item)
             }
         }
     }
+
 
     // 보여줄 아이템 개수만큼 View를 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {

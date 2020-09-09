@@ -26,6 +26,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_fragment_scan.*
@@ -35,8 +39,9 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
 
     var imageCapture : ImageCapture? = null
     var lineText: String? = null
-
-
+    lateinit var wifiList: MutableList<String>
+    var database = FirebaseDatabase.getInstance()
+    var myRef = database.reference
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // View가 Recreate 시 처리
@@ -46,6 +51,22 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
         }
 
         val view = inflater.inflate(R.layout.activity_fragment_scan, container, false)
+
+        var e = object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                wifiList = mutableListOf()
+                for(data in snapshot.children){
+                    if(data.key.equals("wifiList")) {
+                        wifiList.add(data.getValue().toString())
+                    }
+                }
+            }
+        }
+        myRef.addValueEventListener(e)
+
 
         bindCameraUseCase(view)
         view.imageButton.setOnClickListener {
@@ -70,7 +91,6 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
     override fun onResult(value: List<ScanResult>) {
         // Fragment가 Visible중일 때 처리
         if(isVisible){
-            Toast.makeText(context,"Visible 중...", Toast.LENGTH_SHORT).show()
         }
         // Visible이 아닌 경우, Fragment#Argument에 데이터 저장
         else{
@@ -131,6 +151,7 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
 
 
     private fun startScan(password: String) {
+
     }
 
 

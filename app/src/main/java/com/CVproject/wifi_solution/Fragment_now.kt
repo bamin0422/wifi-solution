@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.wifi.*
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_fragment_now.view.*
 
 class Fragment_now : Fragment() {
@@ -39,8 +42,8 @@ class Fragment_now : Fragment() {
     }
 
     // 전역변수로 바꿈
-    lateinit var results: List<ScanResult>
-
+    lateinit var results: MutableList<ScanResult>
+    var myRef = FirebaseDatabase.getInstance().reference
     lateinit var wifiManager: WifiManager
     lateinit var mAdapter: RecyclerAdapter
     lateinit var rotateAnimation: Animation
@@ -79,14 +82,21 @@ class Fragment_now : Fragment() {
         val dlg = WifiDialog(view?.context)
         wifiID = wifiSelected.SSID
         dlg.setOnOKClickedListener { content ->
-            Toast.makeText(context, "PW : ${content}", Toast.LENGTH_SHORT).show()
             wifiPW = content
             wifiManager = view?.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            var curwifi = CurWifi(wifiID, wifiPW, "WPA")
+
             var suggestionList = suggestion(wifiID, wifiPW)
 
             val status = wifiManager.addNetworkSuggestions(suggestionList)
-            if(status!=WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS){}
 
+
+            val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+            val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+            if(isConnected){
+                myRef.child("curWifi").setValue(curwifi)
+            }
         }
         dlg.start(wifiID+"에 연결하시겠습니까?")
 
@@ -128,6 +138,7 @@ class Fragment_now : Fragment() {
         // refresh 버튼 클릭 시 작동
         view.reScanWifi.setOnClickListener {
             success = wifiManager.startScan()
+            myRef.child("wifiList").setValue(null)
             if(!success) Toast.makeText(view.context.applicationContext, "wifi 스캔에 실패하였습니다.", Toast.LENGTH_SHORT).show()
         }
 
