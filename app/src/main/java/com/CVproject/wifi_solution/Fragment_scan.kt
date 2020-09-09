@@ -63,8 +63,6 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
                         wifiList.add(data.getValue().toString())
                     }
                 }
-
-                Toast.makeText(context, wifiList.toString(), Toast.LENGTH_SHORT).show()
             }
         }
         myRef.addValueEventListener(e)
@@ -93,7 +91,6 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
     override fun onResult(value: List<ScanResult>) {
         // Fragment가 Visible중일 때 처리
         if(isVisible){
-            Toast.makeText(context,"Visible 중...", Toast.LENGTH_SHORT).show()
         }
         // Visible이 아닌 경우, Fragment#Argument에 데이터 저장
         else{

@@ -82,11 +82,9 @@ class Fragment_now : Fragment() {
         val dlg = WifiDialog(view?.context)
         wifiID = wifiSelected.SSID
         dlg.setOnOKClickedListener { content ->
-            Toast.makeText(context, "PW : ${content}", Toast.LENGTH_SHORT).show()
             wifiPW = content
             wifiManager = view?.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
             var curwifi = CurWifi(wifiID, wifiPW, "WPA")
-            curwifi.toString()
 
             var suggestionList = suggestion(wifiID, wifiPW)
 

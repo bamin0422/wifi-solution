@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var myRef = FirebaseDatabase.getInstance().reference
-        myRef.setValue(null)
+        myRef.child("wifiList").setValue(null)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
