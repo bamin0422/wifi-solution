@@ -35,7 +35,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_fragment_scan.*
 import kotlinx.android.synthetic.main.activity_fragment_scan.view.*
 
-class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
+class Fragment_scan : Fragment(){
 
     var imageCapture : ImageCapture? = null
     var lineText: String? = null
@@ -44,11 +44,6 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
     var myRef = database.reference
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // View가 Recreate 시 처리
-        val restoreValue = arguments?.getString(keyRestore)
-        if(restoreValue != null){
-            // action to do something
-        }
 
         val view = inflater.inflate(R.layout.activity_fragment_scan, container, false)
 
@@ -77,33 +72,6 @@ class Fragment_scan : Fragment(), Fragment_now.OnResultListener{
         return view
     }
 
-    private fun showFragment_now(){
-        parentFragmentManager.commit {
-            replace(R.id.scan_layout,Fragment_now().apply {
-                // FragmentB 표시할 때 Listener을 전달
-                setListener(this@Fragment_scan)
-            })
-            addToBackStack(null)
-        }
-    }
-
-    // Fragment_now.onResultListener을 실행
-    override fun onResult(value: List<ScanResult>) {
-        // Fragment가 Visible중일 때 처리
-        if(isVisible){
-        }
-        // Visible이 아닌 경우, Fragment#Argument에 데이터 저장
-        else{
-            arguments = (arguments?:Bundle()).also {
-                it.putString(keyRestore, value.toString())
-            }
-
-        }
-    }
-
-    companion object{
-        private const val keyRestore = "resultRestore"
-    }
 
     fun takePhoto(view: View){
         imageCapture?.takePicture(ContextCompat.getMainExecutor(view.context), object : ImageCapture.OnImageCapturedCallback(){
