@@ -1,23 +1,17 @@
 package com.CVproject.wifi_solution
 
 import android.app.AlertDialog
-import android.content.BroadcastReceiver
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
-import android.net.wifi.WifiNetworkSuggestion
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
@@ -25,7 +19,6 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -39,6 +32,7 @@ class Fragment_scan : Fragment(){
 
     var imageCapture : ImageCapture? = null
     var lineText: String? = null
+    lateinit var wifiManager : WifiManager
     lateinit var wifiList: MutableList<String>
     var database = FirebaseDatabase.getInstance()
     var myRef = database.reference
@@ -47,20 +41,33 @@ class Fragment_scan : Fragment(){
 
         val view = inflater.inflate(R.layout.activity_fragment_scan, container, false)
 
+        wifiManager = view?.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
         var e = object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 wifiList = mutableListOf()
+
                 for(data in snapshot.children){
-                    if(data.key.equals("wifiList")) {
-                        wifiList.add(data.getValue().toString())
+                    if(data.key.equals("wifiList")){
+                        for (d in data.children) {
+                            wifiList.add(d.key.toString())
+                        }
                     }
                 }
             }
         }
         myRef.addValueEventListener(e)
+
+
+        view.button.setOnClickListener {
+
+            for (data in wifiList){
+                NetworkConnector(wifiManager, context).connectWifi(data, lineText.toString())
+            }
+        }
 
 
         bindCameraUseCase(view)
@@ -107,7 +114,6 @@ class Fragment_scan : Fragment(){
             .setTitle("비밀번호 확인")
             .setPositiveButton("확인"){ dialog, which ->
                 textView.text = "${password.text}"
-                startScan(textView.text.toString())
             }
             .setNeutralButton("취소",null)
             .create()
@@ -117,10 +123,6 @@ class Fragment_scan : Fragment(){
     }
 
 
-
-    private fun startScan(password: String) {
-
-    }
 
 
     fun imageProxyToBitmap(imageProxy: ImageProxy) : Bitmap{
