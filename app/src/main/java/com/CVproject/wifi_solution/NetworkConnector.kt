@@ -51,7 +51,9 @@ class NetworkConnector(private val wifiManager: WifiManager, private val context
                     )
                 )
                 if(status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS){
-                    myRef.child("curWifi").setValue(CurWifi(ssid, pw, "WPA"))
+                    myRef.child("curWifi").child("ssid").setValue(ssid)
+                    myRef.child("curWifi").child("password").setValue(pw)
+                    myRef.child("curWifi").child("securityType").setValue("WPA")
                 }
 
             }
@@ -65,10 +67,11 @@ class NetworkConnector(private val wifiManager: WifiManager, private val context
                     val netId = addNetwork(wifiConfig)
                     disconnect()
                     enableNetwork(netId, true)
-                    reconnect()
                 }
                 if(isWifiConnected(context)){
-                    myRef.child("curWifi").setValue(CurWifi(ssid, pw, "WPA"))
+                    myRef.child("curWifi").child("ssid").setValue(ssid)
+                    myRef.child("curWifi").child("password").setValue(pw)
+                    myRef.child("curWifi").child("securityType").setValue("WPA")
                 }
             }
         }
