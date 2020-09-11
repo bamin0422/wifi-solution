@@ -10,6 +10,7 @@ import android.os.Build
 import com.google.firebase.database.FirebaseDatabase
 
 class NetworkConnector(private val wifiManager: WifiManager, private val context: Context?) {
+
     var myRef = FirebaseDatabase.getInstance().reference
 
     fun connectWifi(ssid: String, pw: String){

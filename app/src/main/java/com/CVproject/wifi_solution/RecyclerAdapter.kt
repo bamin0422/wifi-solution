@@ -23,7 +23,7 @@ class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -
 
         fun setItem(item: ScanResult){
             tvWifiName.setText(item.SSID)
-            myRef.child("wifiList").push().setValue(item.SSID)
+            myRef.child("wifiList").child(item.SSID).setValue("wifiID")
             view.setOnClickListener {
                 itemclick(item)
             }
