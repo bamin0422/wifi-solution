@@ -51,15 +51,17 @@ class Fragment_scan : Fragment(){
                 wifiList = mutableListOf()
 
                 for(data in snapshot.children){
-                    if(data.key.equals("wifiList")){
-                        for (d in data.children) {
-                            wifiList.add(d.key.toString())
-                        }
+                    if(data.key.equals("wifiList")) {
+                        wifiList.add(Ldata.child("wifiList").getValue())
+                    
                     }
                 }
             }
         }
         myRef.addValueEventListener(e)
+
+        
+        
 
 
         view.button.setOnClickListener {
