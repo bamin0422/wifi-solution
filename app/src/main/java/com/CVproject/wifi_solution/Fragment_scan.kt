@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +18,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -30,8 +32,9 @@ import kotlinx.android.synthetic.main.activity_fragment_scan.view.*
 
 class Fragment_scan : Fragment(){
 
+    lateinit var mAdView: AdView
     var imageCapture : ImageCapture? = null
-    var lineText: String? = null
+    var lineText: String = ""
     lateinit var wifiManager : WifiManager
     lateinit var wifiList: MutableList<String>
     var database = FirebaseDatabase.getInstance()
@@ -41,7 +44,9 @@ class Fragment_scan : Fragment(){
 
         val view = inflater.inflate(R.layout.activity_fragment_scan, container, false)
 
-        wifiManager = view?.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        mAdView = view.findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         var e = object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -52,7 +57,9 @@ class Fragment_scan : Fragment(){
 
                 for(data in snapshot.children){
                     if(data.key.equals("wifiList")) {
-                        wifiList.add(Ldata.child("wifiList").getValue())
+                       for(d in data.children){
+                           wifiList.add(d.value.toString())
+                       }
                     
                     }
                 }
@@ -60,24 +67,21 @@ class Fragment_scan : Fragment(){
         }
         myRef.addValueEventListener(e)
 
-        
-        
-
-
-        view.button.setOnClickListener {
+        view.checkbtn.setOnClickListener {
+            wifiManager = view.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
             for (data in wifiList){
-                NetworkConnector(wifiManager, context).connectWifi(data, lineText.toString())
+                if (data == null || data=="")continue
+                else {
+                    NetworkConnector(wifiManager, context).connectWifi(data, textView.text.toString())
+                    if(NetworkConnector(wifiManager, context).isWifiConnected(context)) break
+                }
             }
         }
-
-
         bindCameraUseCase(view)
         view.imageButton.setOnClickListener {
             takePhoto(view)
         }
-
-
         return view
     }
 
