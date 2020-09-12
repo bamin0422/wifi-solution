@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.FirebaseDatabase
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
@@ -24,11 +27,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setPermission() // 권한 췍
+        MobileAds.initialize(this){} // 모바일 광고 SDK 초기화
+
+
+       setPermission() // 권한 췍
 
         withfi_view_pager.adapter =
             MainPagerAdapter(supportFragmentManager) // adapter를 사용해 Viewpager와 fragment연결
-        withfi_view_pager.offscreenPageLimit = 2 // 뷰 계층 구조의 보관된 페이지, View/Fragment 수를 제어할 수 있다.
+        withfi_view_pager.offscreenPageLimit = 2 // 뷰 계층 구조의 보관된 페이지, View/Fragment 화수를 제어할 수 있다.
 
         // viewPager 설정
         withfi_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

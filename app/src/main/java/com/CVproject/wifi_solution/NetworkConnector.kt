@@ -78,7 +78,7 @@ class NetworkConnector(private val wifiManager: WifiManager, private val context
         }
     }
 
-    private fun isWifiConnected(context: Context?): Boolean {
+    public fun isWifiConnected(context: Context?): Boolean {
 
         var result = false
         val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

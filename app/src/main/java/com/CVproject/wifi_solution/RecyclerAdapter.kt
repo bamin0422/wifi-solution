@@ -16,14 +16,15 @@ class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -
 
     // ViewHolder 단위 객체로 View의 데이터를 설정
     class ViewHolder (v: View, itemClick: (ScanResult) -> Unit): RecyclerView.ViewHolder(v){
+
         var tvWifiName: TextView = v.findViewById(R.id.wifi_name)
         var myRef:DatabaseReference = FirebaseDatabase.getInstance().reference
         var view = v
         var itemclick = itemClick
 
-        fun setItem(item: ScanResult){
+        fun setItem(item: ScanResult) {
             tvWifiName.setText(item.SSID)
-            myRef.child("wifiList").child(item.SSID).setValue("wifiID")
+            myRef.child("wifiList").push().setValue(item.SSID)
             view.setOnClickListener {
                 itemclick(item)
             }
