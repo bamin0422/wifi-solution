@@ -1,10 +1,14 @@
 # wifi-solution
 
-![](img/withfi_main.png)
+![image](https://user-images.githubusercontent.com/28584275/93019949-44f6ea00-f615-11ea-90f3-985820a1c6f6.png)
+
+
+
 
 평소에 wifi 접속을 할 때, 일일이 텍스트로 비밀번호를 입력해야하는 불편한 점과 친구들과 wifi를 보다 쉽게 사용하고 공유하는 목적으로 **With fi**라는 앱을 기획하게 되었습니다.
 
 <br>
+
 
 전체적인 **기능**은 다음과 같습니다.
 
@@ -25,8 +29,9 @@ layout은 **Intro, wifi_current, OCR_scan, QR_wifi** 등 크게 4개의 화면�
 <hr>
 
 ### Intro
+![image](https://user-images.githubusercontent.com/28584275/93020189-b97e5880-f616-11ea-9b78-a58c69b96e70.png)
 
-![](img/Intro.png)
+
 
 Intro layout은 처음 접속했을 때, 2초간 보여주도록 할 것입니다.
 
@@ -34,7 +39,8 @@ Intro layout은 처음 접속했을 때, 2초간 보여주도록 할 것입니�
 
 ### wifi_current
 
-![](img/wifi_current.png)
+![1600001686669-3](https://user-images.githubusercontent.com/28584275/93020241-e16dbc00-f616-11ea-80d9-da2c3f138a27.png)
+
 
 wifi_now는 현재 주변에 있는 wifi 목록과 인터넷 속도를 보여줍니다.
 
@@ -42,7 +48,8 @@ wifi_now는 현재 주변에 있는 wifi 목록과 인터넷 속도를 보여줍
 
 ### OCR_scan
 
-![](img/OCR_scan.png)
+![1600001686669-2](https://user-images.githubusercontent.com/28584275/93020258-f0546e80-f616-11ea-821a-6f7411b23908.png)
+
 
 OCR_scan 화면은 적혀있는 wifi의 비밀번호를 스캔해 바로 접속하는 기능을 가지고 있습니다.
 
@@ -54,7 +61,8 @@ OCR_scan 화면은 적혀있는 wifi의 비밀번호를 스캔해 바로 접속�
 
 ### QR_wifi
 
-![](img/QR_wifi.png)
+![1600001686669-4](https://user-images.githubusercontent.com/28584275/93020268-fb0f0380-f616-11ea-9f3e-5e981e626c6c.png)
+
 
 QR_wifi는 안드로이드 스튜디오의 zxing라이브러리를 사용해, 연결된 와이파이의 ID와 password 정보를 담아 주변 사람들이 이를 스캔만하여도 연결이 가능하게 구현할 예정입니다.
 
