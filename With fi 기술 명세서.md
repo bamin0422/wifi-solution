@@ -508,7 +508,7 @@
 
 - WifiNetworkSuggestion을 활용해 list에 네트워크 suggestion을 추가, 삭제한다.
 
-  ```
+  ```kotlin
   fun connectWifi(ssid: String, pw: String){
       when{
           // WifiNetworkSuggestion 버전 29이상일 때만 사용
@@ -554,6 +554,8 @@
       }
   }
   ```
+  
+  
 
 
 
