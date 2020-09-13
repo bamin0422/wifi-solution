@@ -583,7 +583,7 @@ QR_wifi는 안드로이드 스튜디오의 zxing라이브러리를 사용해, �
 
 - WifiNetworkSuggestion을 활용해 list에 네트워크 suggestion을 추가, 삭제한다.
 
-  ```
+  ```kotlin
   fun connectWifi(ssid: String, pw: String){
       when{
           // WifiNetworkSuggestion 버전 29이상일 때만 사용
@@ -629,6 +629,8 @@ QR_wifi는 안드로이드 스튜디오의 zxing라이브러리를 사용해, �
       }
   }
   ```
+  
+  
 
 
 
