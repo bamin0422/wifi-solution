@@ -74,7 +74,10 @@ class Fragment_scan : Fragment(){
                 if (data == null || data=="")continue
                 else {
                     NetworkConnector(wifiManager, context).connectWifi(data, textView.text.toString())
-                    if(NetworkConnector(wifiManager, context).isWifiConnected(context)) break
+                    if(NetworkConnector(wifiManager, context).isWifiConnected(context)){
+                        NetworkConnector(wifiManager, context).getCurSSID() // as soon as connect, bring current ssid
+                        break
+                    }
                 }
             }
         }

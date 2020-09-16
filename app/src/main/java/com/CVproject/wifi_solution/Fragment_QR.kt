@@ -1,7 +1,9 @@
 package com.CVproject.wifi_solution
 
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,6 +39,7 @@ class Fragment_QR : Fragment(){
         var currentWifi: CurWifi? = null
         var wifiID : String = ""
         var wifiPW : String = ""
+        var wifiManager = view.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
 
         mAdView = view.findViewById(R.id.adView)
@@ -51,6 +54,7 @@ class Fragment_QR : Fragment(){
                 for(data in snapshot.children){
                     if(data.key.equals("curWifi")) {
                         if(data.child("ssid").key.equals("ssid")){
+                            NetworkConnector(wifiManager, context).getCurSSID()
                             wifiID = data.child("ssid").value as String
                         }
                         if(data.child("password").key.equals("password")){
@@ -64,9 +68,11 @@ class Fragment_QR : Fragment(){
 
         view.btn_qrmaker.setOnClickListener {
                 if (wifiID == "" || wifiPW == "-"){
+                    wifiID = wifiID.replace("\"", "") // remove "" in QR's name
                     wifi_name_QR.setText("wifi를 다시 연결해 주십시오.")
                 }
                 else {
+                    wifiID = wifiID.replace("\"", "") // remove "" in QR's name
                     currentWifi = CurWifi(wifiID, wifiPW, "WPA")
                     QR_image.setImageBitmap(QRmaker(currentWifi.toString()).makeQRBitmap())
                     wifi_name_QR.setText(currentWifi?.ssid)
