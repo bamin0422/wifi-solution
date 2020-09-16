@@ -11,6 +11,7 @@ import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
@@ -60,7 +61,7 @@ class Fragment_scan : Fragment(){
                        for(d in data.children){
                            wifiList.add(d.value.toString())
                        }
-                    
+
                     }
                 }
             }
@@ -68,6 +69,7 @@ class Fragment_scan : Fragment(){
         myRef.addValueEventListener(e)
 
         view.checkbtn.setOnClickListener {
+
             wifiManager = view.context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
             for (data in wifiList){
@@ -80,6 +82,7 @@ class Fragment_scan : Fragment(){
                     }
                 }
             }
+            Toast.makeText(context,"비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
         }
         bindCameraUseCase(view)
         view.imageButton.setOnClickListener {
@@ -123,6 +126,7 @@ class Fragment_scan : Fragment(){
             .setTitle("비밀번호 확인")
             .setPositiveButton("확인"){ dialog, which ->
                 textView.text = "${password.text}"
+                Toast.makeText(context,"확인 버튼을 누르고, 연결될 때까지 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
             }
             .setNeutralButton("취소",null)
             .create()
