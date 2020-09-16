@@ -68,11 +68,11 @@ class Fragment_QR : Fragment(){
 
         view.btn_qrmaker.setOnClickListener {
                 if (wifiID == "" || wifiPW == "-"){
-                    wifiID = wifiID.replace("\"", "")
+                    wifiID = wifiID.replace("\"", "") // remove "" in QR's name
                     wifi_name_QR.setText("wifi를 다시 연결해 주십시오.")
                 }
                 else {
-                    wifiID = wifiID.replace("\"", "")
+                    wifiID = wifiID.replace("\"", "") // remove "" in QR's name
                     currentWifi = CurWifi(wifiID, wifiPW, "WPA")
                     QR_image.setImageBitmap(QRmaker(currentWifi.toString()).makeQRBitmap())
                     wifi_name_QR.setText(currentWifi?.ssid)

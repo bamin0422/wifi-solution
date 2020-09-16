@@ -95,7 +95,7 @@ class NetworkConnector(private var wifiManager: WifiManager, private val context
         return result
     }
 
-    public fun getCurSSID(){
+    public fun getCurSSID(){ // Bring current ssid
         wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
         wifiInfo = wifiManager.getConnectionInfo()
         var ssid = wifiInfo.getSSID()
