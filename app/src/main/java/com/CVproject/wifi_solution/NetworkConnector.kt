@@ -3,15 +3,21 @@ package com.CVproject.wifi_solution
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
+import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 
-class NetworkConnector(private val wifiManager: WifiManager, private val context: Context?) {
+class NetworkConnector(private var wifiManager: WifiManager, private val context: Context?) {
 
     var myRef = FirebaseDatabase.getInstance().reference
+
+    lateinit var wifiInfo: WifiInfo
+
 
     fun connectWifi(ssid: String, pw: String){
         when{
@@ -51,12 +57,8 @@ class NetworkConnector(private val wifiManager: WifiManager, private val context
                             .build()
                     )
                 )
-                if(status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS){
-                    myRef.child("curWifi").child("ssid").setValue(ssid)
-                    myRef.child("curWifi").child("password").setValue(pw)
-                    myRef.child("curWifi").child("securityType").setValue("WPA")
-                }
-
+                myRef.child("curWifi").child("password").setValue(pw)
+                myRef.child("curWifi").child("securityType").setValue("WPA")
             }
 
             else -> {
@@ -69,11 +71,9 @@ class NetworkConnector(private val wifiManager: WifiManager, private val context
                     disconnect()
                     enableNetwork(netId, true)
                 }
-                if(isWifiConnected(context)){
-                    myRef.child("curWifi").child("ssid").setValue(ssid)
-                    myRef.child("curWifi").child("password").setValue(pw)
-                    myRef.child("curWifi").child("securityType").setValue("WPA")
-                }
+                myRef.child("curWifi").child("password").setValue(pw)
+                myRef.child("curWifi").child("securityType").setValue("WPA")
+
             }
         }
     }
@@ -93,5 +93,12 @@ class NetworkConnector(private val wifiManager: WifiManager, private val context
             }
         }
         return result
+    }
+
+    public fun getCurSSID(){
+        wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifiInfo = wifiManager.getConnectionInfo()
+        var ssid = wifiInfo.getSSID()
+        myRef.child("curWifi").child("ssid").setValue(ssid)
     }
 }
