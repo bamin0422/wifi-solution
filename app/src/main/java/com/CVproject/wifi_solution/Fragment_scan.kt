@@ -82,7 +82,7 @@ class Fragment_scan : Fragment(){
                     }
                 }
             }
-            Toast.makeText(context,"비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show() // add Toast
         }
         bindCameraUseCase(view)
         view.imageButton.setOnClickListener {
