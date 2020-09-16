@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/btn_wifiList"
+        android:icon="@drawable/wifi_icon_y"
+        android:title="wifi" />
+
+    <item
+        android:title="스캔"
+        android:id="@+id/btn_scan"
+        android:icon="@drawable/withfi_shutter" />
+
+    <item
+    android:id="@+id/btn_QR"
+    android:icon="@drawable/qricon_n"
+    android:title="QR공유"/>
+
+</menu>
