@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "850399909080",
+    "firebase_url": "https://wifi-solution-6eaf5.firebaseio.com",
+    "project_id": "wifi-solution-6eaf5",
+    "storage_bucket": "wifi-solution-6eaf5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850399909080:android:a6fce47125ceaaeecab3ad",
+        "android_client_info": {
+          "package_name": "com.CVproject.wifi_solution"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850399909080-84i24gmgnu7u9tcbk3kla3kkflbo4ucc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.CVproject.wifi_solution",
+            "certificate_hash": "31ca796f739f0ff57994c14825f59777226ddc15"
+          }
+        },
+        {
+          "client_id": "850399909080-05c4kucd397fh6me6cvkhtr4fia1m3k7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADuRuCzm2WHCI2rfB_XcGTkZxEsGUkXKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850399909080-05c4kucd397fh6me6cvkhtr4fia1m3k7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
