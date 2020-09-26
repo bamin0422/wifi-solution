@@ -1,4 +1,4 @@
-package com.CVproject.wifi_solution.Adapter
+package com.CVproject.wifi_solution
 
 
 import android.content.Intent
