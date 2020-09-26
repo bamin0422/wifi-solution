@@ -1,9 +1,11 @@
-package com.CVproject.wifi_solution
+package com.CVproject.wifi_solution.Adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.PagerAdapter
+import com.CVproject.wifi_solution.Fragment.Fragment_QR
+import com.CVproject.wifi_solution.Fragment.Fragment_now
+import com.CVproject.wifi_solution.Fragment.Fragment_scan
 
 class MainPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 

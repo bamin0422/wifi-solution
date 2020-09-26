@@ -1,4 +1,4 @@
-package com.CVproject.wifi_solution
+package com.CVproject.wifi_solution.Fragment
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.CVproject.wifi_solution.NetworkConnector
+import com.CVproject.wifi_solution.R
+import com.CVproject.wifi_solution.Adapter.RecyclerAdapter
+import com.CVproject.wifi_solution.WifiDialog
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_fragment_now.view.*
 

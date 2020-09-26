@@ -1,4 +1,4 @@
-package com.CVproject.wifi_solution
+package com.CVproject.wifi_solution.Fragment
 
 import android.app.AlertDialog
 import android.content.Context
@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.TextView
@@ -19,9 +18,10 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.CVproject.wifi_solution.NetworkConnector
+import com.CVproject.wifi_solution.R
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

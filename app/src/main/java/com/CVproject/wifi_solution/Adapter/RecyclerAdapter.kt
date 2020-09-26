@@ -1,4 +1,4 @@
-package com.CVproject.wifi_solution
+package com.CVproject.wifi_solution.Adapter
 
 import android.net.wifi.ScanResult
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.CVproject.wifi_solution.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -33,7 +34,7 @@ class RecyclerAdapter(var items: List<ScanResult>, val itemClick: (ScanResult) -
 
 
     // 보여줄 아이템 개수만큼 View를 생성
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.wifi_list_item, parent, false)
         return ViewHolder(itemView, itemClick)
     }
